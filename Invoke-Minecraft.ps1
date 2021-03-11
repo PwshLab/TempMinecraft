@@ -31,10 +31,9 @@ function Invoke-Minecraft {
     New-Item -Path $MCPath -Name Server -ItemType Directory
     New-Item -Path $MCPath -Name Client -ItemType Directory
 
-    $Downloader = New-Object Net.WebClient
-    $ServerTask = $Downloader.DownloadFileTaskAsync($ServerURL, $ServerFilePath)
-    $ClientTask = $Downloader.DownloadFileTaskAsync($ClientURL, $ClientInstallPath)
-    $ConfTask = $Downloader.DownloadDataTaskAsync($ConfURL, $ConfTmpPath)
+    $ServerTask = (New-Object Net.WebClient).DownloadFileTaskAsync($ServerURL, $ServerFilePath)
+    $ClientTask = (New-Object Net.WebClient).DownloadFileTaskAsync($ClientURL, $ClientInstallPath)
+    $ConfTask = (New-Object Net.WebClient).DownloadDataTaskAsync($ConfURL, $ConfTmpPath)
 
     New-Item -Path $ServerPath -Name "eula.txt" -ItemType File -Value "eula=true"
     New-Item -Path $ServerPath -Name "Server.bat" -ItemType File -Value "java -Xmx1024M -Xms1024M -jar server.jar nogui"
