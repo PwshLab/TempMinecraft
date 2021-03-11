@@ -9,7 +9,7 @@ function Invoke-Minecraft {
 		$ClientURL = "https://launcher.mojang.com/download/MinecraftInstaller.msi",
         [Parameter(Mandatory = $false, Position = 2)]
 		[String]
-		$ConfURL = "https://raw.github.com/mo-tec/Invoke-Minecraft/master/Conf.zip",
+		$ConfURL = "https://raw.github.com/mo-tec/Invoke-Minecraft/main/Conf.zip",
         [Parameter(Mandatory = $false, Position = 3)]
 		[Switch]
         $Clean
