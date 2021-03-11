@@ -31,9 +31,10 @@ function Invoke-Minecraft {
     New-Item -Path $MCPath -Name Server -ItemType Directory
     New-Item -Path $MCPath -Name Client -ItemType Directory
 
-    $ServerTask = (New-Object Net.WebClient).DownloadFileTaskAsync($ServerURL, $ServerFilePath)
-    $ClientTask = (New-Object Net.WebClient).DownloadFileTaskAsync($ClientURL, $ClientInstallPath)
-    $ConfTask = (New-Object Net.WebClient).DownloadDataTaskAsync($ConfURL, $ConfTmpPath)
+    $Downloader = New-Object Net.WebClient
+    $ServerTask = $Downloader.DownloadFile($ServerURL, $ServerFilePath)
+    $ClientTask = $Downloader.DownloadFile($ClientURL, $ClientInstallPath)
+    $ConfTask = $Downloader.DownloadFile($ConfURL, $ConfTmpPath)
 
     New-Item -Path $ServerPath -Name "eula.txt" -ItemType File -Value "eula=true"
     New-Item -Path $ServerPath -Name "Server.bat" -ItemType File -Value "java -Xmx1024M -Xms1024M -jar server.jar nogui"
@@ -41,8 +42,6 @@ function Invoke-Minecraft {
     New-Item -Path $ClientPath -Name "data" -ItemType Directory
     New-Item -Path $ClientPath -Name "Client.bat" -ItemType File -Value '"%cd%\bin\Launcher.exe" --workDir "%cd%\data\.minecraft"'
     New-Item -Path (Join-Path -Path $ClientPath -ChildPath "/data") -Name ".minecraft" -ItemType Directory
-
-    while (-not ($ServerTask.IsCompleted -and $ClientTask.IsCompleted -and $ConfTask.IsCompleted) ) { Start-Sleep -Milliseconds 500 }
 
     Start-Process msiexec "/i $ClientFilePath /qn" -Wait
     Copy-Item -Path "C:\Program Files (x86)\Minecraft Launcher\MinecraftLauncher.exe" -Destination $ClientFilePath
